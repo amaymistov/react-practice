@@ -28,6 +28,9 @@ function App() {
             </div>
             <div className="d-flex justify-center items">
                 <div className="card">
+                    <div className="favorite">
+                        <img src="/img/favorite.svg" height="20px" alt="Unliked"/>
+                    </div>
                     <img width={133} height={112} src="/img/sneakers/1.jpg" alt="1"/>
                     <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
                     <div className="d-flex justify-between align-center">
