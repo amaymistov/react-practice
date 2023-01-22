@@ -33,10 +33,12 @@ header {
   display: flex;
   flex-direction: column;
   gap: 40px;
+
   h1 {
     margin: 0;
   }
 }
+
 .items {
   gap: 40px;
 }
@@ -49,7 +51,7 @@ header {
   transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
 
   &:hover {
-    box-shadow: 0px 20px 35px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.06);
     transform: translateY(-5px);
   }
 
@@ -95,5 +97,126 @@ header {
     padding: 13px;
     font-size: 16px;
     width: 200px;
+  }
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgb(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.drawer {
+  gap: 30px;
+  width: 420px;
+  height: 100%;
+  right: 0;
+  position: absolute;
+  background: #FFFFFF;
+  box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+
+  h2 {
+    margin: 0;
+  }
+
+  .items {
+    overflow: auto;
+  }
+}
+
+.items {
+  flex: 1;
+  gap: 20px;
+}
+
+.cartItem {
+  gap: 30px;
+  border: 1px solid #F3F3F3;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 20px;
+
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  b {
+    font-size: 14px;
+  }
+}
+
+.removeButton {
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.15s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.cartTotalBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  ul {
+    gap: 20px;
+
+    li {
+      display: flex;
+      align-items: flex-end;
+
+      div {
+        flex: 1;
+        height: 1px;
+        border-bottom: 1px dashed #dfdfdf;
+        position: relative;
+        top: -4px;
+        margin: 0 7px;
+      }
+    }
+  }
+
+  .greenButton {
+    position: relative;
+
+    &:hover {
+      img {
+        transform: translateX(5px);
+      }
+    }
+    img {
+      position: absolute;
+      right: 30px;
+      top: 20px;
+      transition: transform 0.15s ease-in-out;
+    }
+  }
+}
+
+.greenButton {
+  width: 100%;
+  height: 55px;
+  background: #9DD558;
+  border-radius: 18px;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: lighten(#9DD558, 5%);
+  }
+
+  &:active {
+    background: darken(#9DD558, 5%);
   }
 }
