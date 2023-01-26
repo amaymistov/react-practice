@@ -1,10 +1,19 @@
+import {useState} from "react";
+
 import styles from "./Card.module.scss"
 
-function Index({title, price, image}) {
+function Index({title, price, image, onAddCard, onFavorite}) {
+    const [isAdded, setIsAdded] = useState();
+
+    const onAddedCard = () => {
+        onAddCard({title, price, image})
+        setIsAdded(!isAdded)
+    }
+
     return (
         <div className={styles.card}>
-            <div className="favorite">
-                <img src="/img/favorite.svg" height="20px" alt="Unliked"/>
+            <div className={styles.favorite}>
+                <img src="/img/favorite.svg" height="20px" alt="Unliked" onClick={onFavorite}/>
             </div>
             <img width={133} height={112} src={image} alt={title}/>
             <h5>{title}</h5>
@@ -13,9 +22,9 @@ function Index({title, price, image}) {
                     <span>Цена:</span>
                     <b>{price} руб.</b>
                 </div>
-                <button className="button">
-                    <img width={11} height={11} src="/img/plus.svg" alt="add cart"/>
-                </button>
+                <img className={styles.addCard} width={32} height={32} onClick={onAddedCard}
+                     src={isAdded ? "/img/checked.svg" : "/img/plus.svg"}
+                     alt="add cart"/>
             </div>
         </div>
     )

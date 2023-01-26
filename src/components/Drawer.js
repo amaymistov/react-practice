@@ -1,28 +1,22 @@
-function Drawer() {
+function Drawer({closeCart, items}) {
     return (
         <div className="overlay">
             <div className="drawer d-flex flex-column">
                 <div className="d-flex align-center justify-between">
                     <h2>Корзина</h2>
-                    <img className="removeButton" src="/img/removeBtn.svg" alt="Remove"/>
+                    <img className="removeButton" src="/img/removeBtn.svg" alt="Close" onClick={closeCart}/>
                 </div>
                 <div className="items d-flex flex-column">
-                    <div className="cartItem d-flex align-center">
-                        <img width={70} height={70} src="/img/sneakers/1.jpg" alt="1"/>
-                        <div>
-                            <p className="mb-5">Мужские Кроссовки Nike Air Max 270</p>
-                            <b>12 999 руб.</b>
+                    {items.map(item => (
+                        <div key={item.title} className="cartItem d-flex align-center">
+                            <img width={70} height={70} src={item.image} alt={item.image}/>
+                            <div>
+                                <p className="mb-5">{item.title}</p>
+                                <b>{item.price}</b>
+                            </div>
+                            <img className="removeButton" src="/img/removeBtn.svg" alt="Remove"/>
                         </div>
-                        <img className="removeButton" src="/img/removeBtn.svg" alt="Remove"/>
-                    </div>
-                    <div className="cartItem d-flex align-center">
-                        <img width={70} height={70} src="/img/sneakers/2.jpg" alt="2"/>
-                        <div>
-                            <p className="mb-5">Мужские Кроссовки Nike Air Max 270</p>
-                            <b>12 999 руб.</b>
-                        </div>
-                        <img className="removeButton" src="/img/removeBtn.svg" alt="Remove"/>
-                    </div>
+                    ))}
                 </div>
                 <div className="cartTotalBlock">
                     <ul className="d-flex flex-column">
