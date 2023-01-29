@@ -50,6 +50,14 @@ header {
   border: 1px solid #F3F3F3;
   border-radius: 10px;
   padding: 0 15px;
+  position: relative;
+
+  .removeButton {
+    position: absolute;
+    height: 18px;
+    right: 15px;
+    top: 14px;
+  }
 
   input {
     border: none;
@@ -67,6 +75,31 @@ header {
   top: 0;
   background: rgb(0, 0, 0, 0.5);
   z-index: 1;
+}
+
+.emptyCart {
+  text-align: center;
+  flex: 1;
+  gap: 30px;
+
+  .greenButton {
+    width: 245px;
+    position: relative;
+
+    &:hover {
+      img {
+        transform: translateX(5px);
+      }
+    }
+
+    img {
+      position: absolute;
+      left: 30px;
+      top: 20px;
+      rotate: 180deg;
+      transition: transform 0.15s ease-in-out;
+    }
+  }
 }
 
 .drawer {
@@ -151,6 +184,7 @@ header {
         transform: translateX(5px);
       }
     }
+
     img {
       position: absolute;
       right: 30px;
