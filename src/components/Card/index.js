@@ -2,9 +2,9 @@ import { useState } from 'react'
 
 import styles from './Card.module.scss'
 
-function Index({ title, price, image, onAddCard, onAddFavorites }) {
+function Index({ id, title, price, image, onAddCard, onAddFavorites, favorited = false }) {
 	const [isAdded, setIsAdded] = useState()
-	const [isFavorite, setIsFavorite] = useState()
+	const [isFavorite, setIsFavorite] = useState(favorited)
 
 	const onAddedCard = () => {
 		onAddCard({ title, price, image })
@@ -12,7 +12,7 @@ function Index({ title, price, image, onAddCard, onAddFavorites }) {
 	}
 
 	const onAddedFavorite = () => {
-		onAddFavorites({ title, price, image })
+		onAddFavorites({ id, title, price, image })
 		setIsFavorite(!isFavorite)
 	}
 
