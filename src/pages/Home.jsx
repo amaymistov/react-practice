@@ -7,7 +7,6 @@ function Home({
 								onAddToFavorite,
 								onSearchValue,
 								setSearchValue,
-								favorites,
 								isLoading
 							}) {
 	const renderItems = () => {
@@ -17,7 +16,6 @@ function Home({
 				key={index}
 				onAddCard={(item) => onAddToCart(item)}
 				onAddFavorites={(item) => onAddToFavorite(item)}
-				favorited={favorites.some(obj => Number(obj.id) === Number(item.id))}
 				loading={isLoading}
 				{...item}
 			/>

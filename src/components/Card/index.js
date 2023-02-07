@@ -1,21 +1,19 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 
 import styles from './Card.module.scss'
 import Loader from '../Loader'
 import AppContext from '../../context'
 
-function Index({
+function Card({
 								 id,
 								 title,
 								 price,
 								 image,
 								 onAddCard,
 								 onAddFavorites,
-								 favorited = false,
 								 loading = false
 							 }) {
-	const { isItemAdded } = useContext(AppContext)
-	const [isFavorite, setIsFavorite] = useState(favorited)
+	const { isItemAdded, isFavoriteAdded } = useContext(AppContext)
 	const obj = { id, parentId: id, title, price, image }
 
 	const onAddedCard = () => {
@@ -24,7 +22,6 @@ function Index({
 
 	const onAddedFavorite = () => {
 		onAddFavorites(obj)
-		setIsFavorite(!isFavorite)
 	}
 
 	return (
@@ -32,10 +29,12 @@ function Index({
 			{loading ? <Loader /> : (
 				<>
 					<div className={styles.favorite}>
-						<img
-							src={isFavorite ? '/img/addFavorite.svg' : '/img/favorite.svg'}
-							height='20px' alt='Unliked'
-							onClick={onAddedFavorite} />
+						{onAddFavorites && (
+							<img
+								src={isFavoriteAdded(id) ? '/img/addFavorite.svg' : '/img/favorite.svg'}
+								height='20px'
+								alt='Unliked'
+								onClick={onAddedFavorite} />)}
 					</div>
 					<img width={133} height={112} src={image} alt={title} />
 					<h5>{title}</h5>
@@ -44,9 +43,14 @@ function Index({
 							<span>Цена:</span>
 							<b>{price} руб.</b>
 						</div>
-						<img className={styles.addCard} width={32} height={32} onClick={onAddedCard}
-								 src={isItemAdded(id) ? '/img/checked.svg' : '/img/plus.svg'}
-								 alt='add cart' />
+						{onAddCard && (
+							<img
+								className={styles.addCard}
+								width={32}
+								height={32}
+								onClick={onAddedCard}
+								src={isItemAdded(id) ? '/img/checked.svg' : '/img/plus.svg'}
+								alt='add cart' />)}
 					</div>
 				</>
 			)}
@@ -54,4 +58,4 @@ function Index({
 	)
 }
 
-export default Index
+export default Card

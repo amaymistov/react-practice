@@ -1,11 +1,12 @@
 import { Route } from 'react-router-dom'
 import Header from './components/Header'
-import Drawer from './components/Drawer'
+import Index from './components/Drawer'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Home from './pages/Home'
 import Favorites from './pages/Favorites'
 import AppContext from './context'
+import Orders from './pages/Orders'
 
 function App() {
 	const [items, setItems] = useState([])
@@ -17,18 +18,22 @@ function App() {
 
 	useEffect(() => {
 		async function fetchData() {
-			setIsLoading(true)
-			const cartResponse = await axios.get('https://63d1614d3f08e4a8ff96b9c5.mockapi.io/cart')
-			const favoritesResponse = await axios.get('https://63d6a9c8e60d5743697cf129.mockapi.io/favorites')
-			const itemsResponse = await axios.get('https://63d1614d3f08e4a8ff96b9c5.mockapi.io/items')
+			try {
+				setIsLoading(true)
+				const cartResponse = await axios.get('https://63d1614d3f08e4a8ff96b9c5.mockapi.io/cart')
+				const favoritesResponse = await axios.get('https://63d6a9c8e60d5743697cf129.mockapi.io/favorites')
+				const itemsResponse = await axios.get('https://63d1614d3f08e4a8ff96b9c5.mockapi.io/items')
 
-			setIsLoading(false)
+				setIsLoading(false)
 
-			setCartItems(cartResponse.data)
-			setFavorites(favoritesResponse.data)
-			setItems(itemsResponse.data)
+				setCartItems(cartResponse.data)
+				setFavorites(favoritesResponse.data)
+				setItems(itemsResponse.data)
+			} catch (error) {
+				alert('Ошибка при запросе')
+				console.error(error)
+			}
 		}
-
 		fetchData()
 	}, [])
 
@@ -63,14 +68,23 @@ function App() {
 	}
 
 	const onAddToFavorite = async (obj) => {
-		console.error('favoriteObj', obj)
 		try {
-			if (favorites.find((favorite) => Number(favorite.id) === Number(obj.id))) {
-				await axios.delete(`https://63d6a9c8e60d5743697cf129.mockapi.io/favorites/${obj.id}`)
-				setFavorites((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)))
+			const findFavorite = favorites.find((favorite) => Number(favorite.parentId) === Number(obj.id))
+			if (findFavorite) {
+				setFavorites((prev) => prev.filter((favorite) => Number(favorite.parentId) !== Number(obj.id)))
+				await axios.delete(`https://63d6a9c8e60d5743697cf129.mockapi.io/favorites/${findFavorite.id}`)
 			} else {
+				setFavorites((prev) => [...prev, obj])
 				const { data } = await axios.post('https://63d6a9c8e60d5743697cf129.mockapi.io/favorites', obj)
-				setFavorites(prev => [...prev, data])
+				setFavorites((prev) => prev.map(favorite => {
+					if (favorite.parentId === data.parentId) {
+						return {
+							...favorite,
+							id: data.id
+						}
+					}
+					return favorite
+				}))
 			}
 		} catch (error) {
 			console.error(error)
@@ -85,12 +99,25 @@ function App() {
 	const isItemAdded = (id) => {
 		return cartItems.some(obj => Number(obj.parentId) === Number(id))
 	}
+	const isFavoriteAdded = (id) => {
+		return favorites.some(obj => Number(obj.parentId) === Number(id))
+	}
 
 	return (
 		<AppContext.Provider
-			value={{ items, cartItems, favorites, isItemAdded, onAddToFavorite, setCartOpen, setCartItems }}>
+			value={{
+				items,
+				cartItems,
+				favorites,
+				isItemAdded,
+				isFavoriteAdded,
+				onAddToFavorite,
+				onAddToCart,
+				setCartOpen,
+				setCartItems
+			}}>
 			<div className='wrapper clear'>
-				{cartOpen && <Drawer items={cartItems} closeCart={() => setCartOpen(false)} removeItem={onRemoveItem} />}
+				<Index items={cartItems} closeCart={() => setCartOpen(false)} removeItem={onRemoveItem} opened={cartOpen} />
 				<Header openCart={() => setCartOpen(true)} />
 				<Route path='/' exact>
 					<Home
@@ -100,13 +127,14 @@ function App() {
 						onAddToFavorite={onAddToFavorite}
 						onSearchValue={onSearchValue}
 						setSearchValue={setSearchValue}
-						favorites={favorites}
-						cartItems={cartItems}
 						isLoading={isLoading}
 					/>
 				</Route>
 				<Route path='/favorites'>
 					<Favorites />
+				</Route>
+				<Route path='/orders'>
+					<Orders />
 				</Route>
 			</div>
 		</AppContext.Provider>
